@@ -1,2 +1,3 @@
-# ehr
-The Bhojpur EHR is a software-as-a-service product used as an Electronic Health Record management engine based on Bhojpur.NET Platform for application delivery.
+# Bhojpur EHR - Electronic Health Record
+
+The `Bhojpur EHR` is an electronic health record management engine applied within the [Bhojpur.NET Platform](https://github.com/bhojpur/platform/) for delivery of distributed `applications` or `services`.
