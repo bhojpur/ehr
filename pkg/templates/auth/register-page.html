@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<form action="/register/user" method="POST">
+    <div class="container" style="margin-top: 0.5em; margin-bottom: 0.5em;">
+        <div class="card" style="border-radius: 1rem;">
+            {% include 'flash.html' %}
+            <div class="card-body" style="background-color: #f2ebd9; border-radius: 1rem;">
+                <h3>Please fill all the forms</h3>
+                <div class="row gutters">
+                    <div class="col-xl-12">
+                        <h6 class="mb-3 text-dark"><u>Add username, password and choose role</u></h6>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" class="form-control"
+                                value="{{session.register_username}}" placeholder="Enter username (3-40 characters)"
+                                minlength="3" maxlength="40" pattern=".*\S+.*"
+                                title="3-40 characters, not allowed only whitespaces." required>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label>Role</label><br>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-dark active">
+                                    <input type="radio" name="options" value="patient" checked>Patient
+                                </label>
+                                <label class="btn btn-outline-dark">
+                                    <input type="radio" name="options" value="doctor">Doctor
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" type="password" name="password" class="form-control"
+                                placeholder="Enter password (minium 5 characters)" minlength="5" pattern=".*\S+.*"
+                                title="5 or more characters, not allowed only whitespaces."
+                                value="{{session.register_password}}" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm password <i id="match" class=""></i></label>
+                            <input id="confirmPassword" type="password" name="confirmPassword" class="form-control"
+                                placeholder="Retype password" minlength="5" pattern=".*\S+.*"
+                                title="Must match to password!" value="{{session.register_password}}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gutters">
+                    <div class="col-xl-12">
+                        <h6 class="mb-3 text-dark"><u>Add personal details</u> <i class="fas fa-user-alt"></i></h6>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="fullName">Full name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Enter full name"
+                                minlength="3" maxlength="40" pattern=".*\S+.*" value="{{session.register_name}}"
+                                title="3-40 characters, not allowed only whitespaces." required>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter email"
+                                minlength="3" maxlength="40" required value="{{session.register_email}}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" class="form-control"
+                                placeholder="e.g. +16282004199 or 08788682735" pattern="^\+?\d+$" minlength="3"
+                                maxlength="20" title="Format +16282004199 or 08788682735. Length max 3-20" required
+                                value="{{session.register_phone}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row gutters">
+                    <div class="col-xl-12">
+                        <h6 class="mb-3 text-dark"><u>Add address details</u> <i class="fas fa-map-marker-alt"></i></h6>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="Street">Address</label>
+                            <input type="text" name="address" class="form-control" placeholder="Enter address"
+                                minlength="2" maxlength="50" pattern=".*\S+.*" value="{{session.register_address}}"
+                                title="2-50 characters, not allowed only whitespaces." required>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="ciTy">City</label>
+                            <input type="text" name="city" class="form-control" placeholder="Enter city" minlength="2"
+                                maxlength="50" pattern=".*\S+.*" title="2-50 characters, not allowed only whitespaces."
+                                required value="{{session.register_city}}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" name="country" class="form-control" placeholder="Enter country"
+                                minlength="2" maxlength="50" pattern=".*\S+.*" value="{{session.register_country}}"
+                                title="2-50 characters, not allowed only whitespaces." required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gutters">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="text-left">
+                            <button onclick="return checkPasswordMatching()" type="submit" name="submit"
+                                class="btn btn-primary">Register!</button>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <a href="/sign-in">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-angle-left"></i> Back to sign in
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="{{ url_for('static', filename='js/registerPasswordConfirm.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile-card.css') }}">
+<div class="col-md-3">
+    <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+        <div class="cardProfile p-4">
+            <div class="imageCard d-flex flex-column justify-content-center align-items-center">
+                <div class="btnCard">
+                    <img class="profileAvatar" src="{{avatar_url}}" alt="Avatar" />
+                </div>
+                <span class="name mt-3">{{user_info.name}}</span>
+                {% if session.is_doctor %}
+                <span class="role">Doctor</span>
+                {% else %}
+                <span class="role">Patient</span>
+                {% endif %}
+                <span class="phone">{{user_info.phone}}</span>
+
+                <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                    <span class="email">{{user_info.email}}</span>
+                </div>
+                <br>
+                <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                    <span class="address">{{user_info.address}}</span>
+                </div>
+                <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                    <span class="address">{{user_info.city}}, {{user_info.country}}</span>
+                </div>
+                <div class=" d-flex mt-2">
+                    <a href="/settings"><button class="btn btn-dark">Edit profile <i class="fas fa-user-edit"></i></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/session.css') }}">
+<form action="/sign-out" method="POST">
+    <div id="group">
+        {% include 'auth/components/session.html' %}
+        <button id="submitButton" type="submit">
+            Sign out <i class="fas fa-sign-out-alt"></i>
+        </button>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </div>
+</form>

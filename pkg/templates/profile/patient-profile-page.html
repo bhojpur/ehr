@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+{% include 'flash.html' %}
+<div class="container-fluid">
+  <div class="row">
+
+    <!--- PROFILE DETAILS, LEFT PART OF PAGE --->
+    {% include 'profile/components/profile-card.html' %}
+
+    <!--- MIDDLE PART --->
+    <div class="col-md-5">
+      <!--- APPOINTMENT TABLE --->
+      {% include 'profile/components/appointments-table.html' %}
+
+      <!--- PRESCRIPTIONS --->
+      <div>
+        <h4><u>Prescriptions</u> <i class="fas fa-prescription-bottle"></i></h4>
+        <h5>Current prescriptions</h5>
+
+        <!--- Current prescriptionss rendering --->
+        <div class="list-group">
+          {% if prescriptions.current_prescriptions|length == 0 %}
+          <span>No current prescriptions</span>
+          {% else %}
+          {% for prescription in prescriptions.current_prescriptions %}
+          <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1"><u>{{ prescription.name }}</u></h6>
+              <small>Amount per day: <span class="badge badge-info badge-pill">{{ prescription.amount_per_day
+                  }}</span></small>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+
+        </div>
+        <br>
+        <!--- History prescriptionss rendering --->
+        <button onClick="rotateArrow(`prescriptionArrow`)" type="button" class="btn btn-dark" data-toggle="collapse"
+          data-target="#historyPrescriptions">Past
+          prescriptions <i class="fas fa-angle-down prescriptionArrow"></i></button>
+        <div id="historyPrescriptions" class="collapse">
+          <div class="list-group">
+            {% if prescriptions.history_prescriptions|length == 0 %}
+            <span>No past prescriptions.</span>
+            {% else %}
+            {% for prescription in prescriptions.history_prescriptions %}
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex justify-content-between">
+                <h6 class="mb-1"><u>{{ prescription.name }}</u></h6>
+                <small>Amount per day: <span class="badge badge-info badge-pill">{{ prescription.amount_per_day
+                    }}</span></small>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--- RIGHT PART --->
+    <div class="col-md-4">
+      {% include 'auth/components/sign-out-button.html' %}
+      <br>
+      <br>
+      <br>
+      <div class="row-md-8">
+        {% if doctor_info %}
+        <h4><u>Doctor info</u> <i class="fas fa-user-md"></i></h4>
+        <div class="doctorInfo">
+          <span class="name">{{ doctor_info.name }}</span>
+          <img src="{{doctor_avatar_url}}" alt="Avatar" style="
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;" />
+          <p class="phone">Urgent matters: {{ doctor_info.phone }}</p>
+        </div>
+        <!--- Means that patient haven't chose personal doctor yet --->
+        {% else %}
+        {% include 'profile/components/sign-doctor-modal.html' %}
+        {% endif %}
+
+        {% if doctor_info %}
+        <div>
+          <form action="/send-message" method="POST">
+            <label for="messageArea"><b><u>Send a message to your doctor</u></b> <i class="fas fa-comments"></i></label>
+            <textarea class="form-control" id="messageArea" name="content" rows="4" cols="40"
+              placeholder="Enter message..." maxlength="300" title="1-300 characters" required></textarea>
+            <input type="hidden" name="receiver_id" value="{{doctor_info.id}}">
+            <button class="form-control btn btn-dark btn-sm" type="submit">Send message <i
+                class="far fa-paper-plane"></i></button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          </form>
+          <br>
+        </div>
+        {% endif %}
+
+        <!--- MESSAGES --->
+        {% include 'profile/components/messages-history.html' %}
+
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/sessionTimer.js') }}"></script>
+  {% endblock %}

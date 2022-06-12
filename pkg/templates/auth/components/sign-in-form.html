@@ -1,0 +1,30 @@
+<style>
+	#passwordEye {
+		float: right;
+		margin-left: -32px;
+		margin-top: -32px;
+		margin-right: 5px;
+		position: relative;
+		z-index: 2;
+	}
+</style>
+<form action="/sign-in" method="POST">
+	<h4 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign in to <u>Bhojpur EHR</u></h4>
+	<div class="form-outline mb-4">
+		<input type="text" name="username" value="{{session.filled_username}}" class="form-control form-control-lg" required />
+		<label class="form-label" for="username">Username</label>
+	</div>
+	<div class="form-outline mb-4">
+		<input id="password" type="password" name="password" class="form-control form-control-lg" required />
+		<span id="passwordEye" onClick="togglePasswordShow()" class="far fa-eye fa-lg"></span>
+		<label class="form-label" for="password">Password</label>
+	</div>
+
+	<div class="mb-4">
+		<button class="btn btn-dark btn-lg btn-block" type="submit">Sign in <i class="fas fa-sign-in-alt"></i></button>
+		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+	</div>
+	<div class="mb-4">
+		<a href="/register">No account? Register new user here.</a>
+	</div>
+</form>

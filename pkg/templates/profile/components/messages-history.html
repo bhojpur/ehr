@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/message-history.css') }}">
+<h4><u>Message history</u> <i class="fas fa-envelope-open-text"></i></h4>
+<!--- Sent messages rendering --->
+<button onclick="rotateArrow(`sentMessageArrow`)" id="the-button" type="button" class="btn btn-dark"
+    data-toggle="collapse" data-target="#sentMessages"><span class="badge badge-message">{{sent_messages|length}}</span> Sent
+    messages <i class="fas fa-angle-down sentMessageArrow"></i></button>
+<div id="sentMessages" class="collapse">
+    <div class="list-group">
+        {% if sent_messages|length == 0 %}
+        <span>You have no sent messages.</span>
+        {% else %}
+        {% for message in sent_messages %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start message-background">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">To: <span class="toOrFrom">{{ message.toOrfrom }}</span></h6>
+                <small>{{ message.sent_at }}</small>
+            </div>
+            <div class="card card-body">
+                {{ message.content }}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<!--- Received messages rendering --->
+<button onClick="rotateArrow(`receivedMessageArrow`)" class="btn btn-dark" data-toggle="collapse"
+    data-target="#receivedMessages"><span class="badge badge-message"">{{received_messages|length}}</span> Received
+    messages <i class="fas fa-angle-down receivedMessageArrow"></i></button>
+<div id="receivedMessages" class="collapse">
+    <div class="list-group">
+        {% if received_messages|length == 0 %}
+        <span>You have no received messages.</span>
+        {% else %}
+        {% for message in received_messages %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start message-background">
+            <div class=" d-flex w-100 justify-content-between">
+            <h6 class="mb-1">From: <span class="toOrFrom">{{ message.toOrfrom }}</span></h6>
+            <small>{{ message.sent_at }}</small>
+        </div>
+        <div class="card card-body">
+            {{ message.content }}
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+</div>

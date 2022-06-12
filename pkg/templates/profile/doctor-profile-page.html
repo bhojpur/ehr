@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+{% include 'flash.html' %}
+<div class="container-fluid">
+    <div class="row">
+
+        <!--- PROFILE DETAILS, LEFT PART OF PAGE --->
+        {% include 'profile/components/profile-card.html' %}
+
+        <!--- MIDDLE PART --->
+        <div class="col-md-5">
+            <!--- APPOINTMENT TABLE --->
+            {% include 'profile/components/appointments-table.html' %}
+
+            <!--- BOOK APPOINTMENT --->
+            <div>
+                <h5><u>Book an appointment</u></h5>
+                {% if doctor_patients|length != 0 %}
+                <form action="/appointment/book/{{user_id}}" method="POST">
+                    <div class="form-row">
+                        <div class="col-md-7 mb-3">
+                            <label for="appointment_type">Appointment type</label>
+                            <input type="text" name="appointment_type" class="form-control"
+                                placeholder="Enter appointment type" pattern=".*\S+.*" minlength="1" maxlength="30"
+                                title="1-30 characters, not allowed only whitespaces." required>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="patient">For patient</label>
+                            <select class="custom-select" id="patient" name="patient_id">
+                                {% for patient in doctor_patients %}
+                                <option value="{{patient.user_id}}">{{patient.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-5 mb-3">
+                            <label for="dateTime">Appointment date</label>
+                            <input class="form-control" type="datetime-local" min="{{time_now}}" name="appointment_date"
+                                id="dateTime" required>
+                        </div>
+                        <div class="col-md-4 mb-2" style="margin-top: 2em;">
+                            <button class="btn btn-dark btn-sm form-control" id="appointment_submit" type="submit">Add
+                                appointment <i class="far fa-calendar-check"></i></button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                </form>
+                {% else %}
+                <p>You have no signed patients.</p>
+                {% endif %}
+            </div>
+            <br>
+
+            <!--- CREATE PRESCRIPTIONS --->
+            <h5><u>Create a new prescription</u> <i class="fas fa-prescription-bottle-alt"></i></h5>
+            <form action="/create-prescription" method="POST">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="prescription">Prescription name:</label>
+                        <input type="text" id="prescription" name="prescription_name" class="form-control"
+                            placeholder="Enter prescription name" pattern=".*\S+.*" minlength="1" maxlength="30"
+                            title="1-30 characters, not allowed only whitespaces." required>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label>Per day:</label>
+                        <select class="custom-select" name="amount_per_day">
+                            <option selected value="1">1</option>
+                            {% for index in range(2,10) %}
+                            <option value="{{ index }}">{{ index }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2" style="margin-top: 2em;">
+                        <button class="btn btn-dark btn-sm form-control" type="submit">Create prescription <i
+                                class="fas fa-marker"></i></button>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    </div>
+                </div>
+            </form>
+            <div style="margin-bottom: 2em;">
+                <button onClick="rotateArrow(`overviewArrow`)" class="btn btn-dark" data-toggle="collapse"
+                    data-target="#overview">Prescriptions overview
+                    <i class="fas fa-angle-down overviewArrow"></i></button>
+                <div id="overview" class="collapse col-md-9 mb-9">
+                    {% if doctor_patients|length != 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr bgcolor="#d4c2b1">
+                                <th>Patient name <i class="fas fa-user-circle"></i></th>
+                                <th>Current <i class="fas fa-prescription-bottle"></i></th>
+                                <th>Past <i class="fas fa-prescription-bottle"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for overview in prescriptions_overview %}
+                            <tr bgcolor="#f2ebd9">
+                                <td>{{ overview.user_name }}</td>
+                                <td style="text-align: center;">{{overview.current_prescriptions}}</td>
+                                <td style="text-align: center;">{{overview.past_prescriptions}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>You have no signed patients.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!--- RIGHT PART --->
+        <div class="col-md-4">
+            {% include 'auth/components/sign-out-button.html' %}
+            <br>
+            <br>
+            <br>
+
+            <div class="row-md-8"></div>
+            <div>
+                <h4><u>Communication with patients</u> <i class="fas fa-comments"></i></h4>
+                {% if doctor_patients|length == 0 %}
+                <span>You have no signed patients.</span>
+                {% else %}
+                <label>Choose patient</label>
+                <form action="/send-message" method="POST">
+                    <select class="custom-select" name="receiver_id">
+                        {% for patient in doctor_patients %}
+                        <option value="{{patient.user_id}}">{{patient.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <textarea class="form-control" id="messageArea" name="content" rows="4" cols="40"
+                        placeholder="Enter message..." maxlength="300" title="1-300 characters" required></textarea>
+                    <button class="form-control btn btn-dark btn-sm" type="submit">Send message <i
+                            class="far fa-paper-plane"></i></button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                </form>
+                {% endif %}
+            </div>
+            <br>
+
+            <!--- MESSAGES --->
+            {% include 'profile/components/messages-history.html' %}
+
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/sessionTimer.js') }}"></script>
+{% endblock %}

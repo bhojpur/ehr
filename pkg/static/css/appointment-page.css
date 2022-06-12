@@ -1,0 +1,51 @@
+.container {
+    border-radius: 1rem;
+    background-color: #f2ebd9;
+    margin-top: 2em;
+}
+
+.topColumn {
+    margin-top: 1em;
+}
+
+.bottomColumn {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: bold
+}
+
+.info {
+    font-size: 16px;
+    font-weight: bold
+}
+
+.time {
+    font-size: 16px;
+}
+
+.phone,
+.email {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.address {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 600
+}
+
+.sickDoge {
+    vertical-align: middle;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.allPres {
+    margin-top: 0.5em;
+}

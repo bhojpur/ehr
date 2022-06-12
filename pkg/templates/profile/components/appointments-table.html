@@ -1,0 +1,30 @@
+<h4 style="margin-top: 1em;"><u>Appointments</u> <i class="far fa-calendar-alt"></i></h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Appointment Type</th>
+            <th>Date</th>
+            {% if session.is_doctor %}
+            <th>Patient name</th>
+            {% else %}
+            <th>Doctor name</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments_list %}
+        <tr bgcolor="{{appointment.bg_color}}">
+            <td><a href="/appointment/{{appointment.id}}/patient/{{appointment.patient_id}}"><button type="button"
+                        class="btn btn-dark btn-sm">View</button></a></td>
+            <td>{{ appointment.appointment_type }}</td>
+            <td>{{ appointment.time }}</td>
+            {% if session.is_doctor %}
+            <td>{{ appointment.patient_name }}</td>
+            {% else %}
+            <td>{{ appointment.doctor_name }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

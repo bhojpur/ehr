@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Appointment{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/appointment-page.css') }}">
+<div class="container">
+    <div class="row gutters">
+        <!--- PATIENT INFO --->
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 topColumn">
+            <h5><u>Patient details</u> <i class="fas fa-user-injured"></i></h5>
+            <div class="name">
+                {{patient_info.name}}
+                <img class="sickDoge" src="/static/images/sickDoge.png" alt="Avatar" />
+            </div>
+            <div class="phone">{{patient_info.phone}}</div>
+            <div class="email">{{patient_info.email}}</div>
+            <div class="address">{{patient_info.address}}</div>
+            <div class="address">{{patient_info.city}}, {{patient_info.country}}</div>
+        </div>
+
+        <!--- APPOINTMENT TYPE --->
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 topColumn">
+            <h5><u>Appointment info</u> <i class="fas fa-info-circle"></i></h5>
+            <div class="info">{{appointment.appointment_type}}</div>
+            <div class="time">{{appointment.time_at}} <i class="far fa-clock"></i></div>
+
+            <!--- ONLY ADMIN CAN SEE THIS --->
+            {% if session.is_doctor %}
+            <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target=".bd-example-modal-sm">
+                Delete appointment <i class="far fa-trash-alt"></i></button>
+            <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="confirmModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Please, confirm appointment deletion.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="/appointment/{{appointment.id}}" method="POST">
+                                <button type="submit" class="btn btn-danger btn-sm">Confirm delete <i
+                                        class="far fa-trash-alt"></i></button></a>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            </form>
+                            <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5">
+            {% include 'auth/components/sign-out-button.html' %}
+            {% include 'flash.html' %}
+        </div>
+
+        <!--- SYMPTON WRITING FOR DOCTOR ROLE --->
+        {% if session.is_doctor %}
+        {% include 'appointment/components/symptom-form.html' %}
+        {% else %}
+        {% include 'appointment/components/symptom-info.html' %}
+        {% endif %}
+
+        <!--- PRESCRIPTIONS --->
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 bottomColumn">
+            <h5><u>Current prescriptions</u> <i class="fas fa-prescription-bottle"></i></h5>
+            {% if current_prescriptions|length == 0 %}
+            <p>No current prescriptions.</p>
+            {% else %}
+            {% for prescription in current_prescriptions %}
+            <form
+                action="/appointment/{{appointment.id}}/prescription/{{prescription.id}}/patient/{{appointment.patient_id}}"
+                method="POST">
+                <div class="list-group">
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-1"><u>{{ prescription.name }}</u></h6>
+                            <div>
+                                {% if session.is_doctor %}
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-minus-square"></i>
+                                    remove</button>
+                                <input type="hidden" name="is_visible" value="False">
+                                {% endif %}
+                                <small>Amount per day: <span
+                                        class="badge badge-info badge-pill">{{prescription.amount_per_day
+                                        }}</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            </form>
+            {% endfor %}
+            {% endif %}
+
+            <!--- ONLY ADMIN CAN SEE THIS --->
+            {% if session.is_doctor %}
+            <h5 class="allPres"><u>All prescriptions</u> <i class="fas fa-capsules"></i></h5>
+            <button onclick="rotateArrow(`allPrescriptionArrow`)" id="the-button" type="button" class="btn btn-dark btn-sm"
+                data-toggle="collapse" data-target="#allPrescriptions"><span id="presListText">View</span>
+                <i class="fas fa-angle-down allPrescriptionArrow"></i></button>
+            <div id="allPrescriptions" class="collapse">
+                <div class="list-group">
+                    {% if all_prescriptions|length == 0 %}
+                    <span>No prescriptions here.</span>
+                    {% else %}
+                    {% for prescription in all_prescriptions %}
+                    <form
+                        action="/appointment/{{appointment.id}}/prescription/{{prescription.id}}/patient/{{appointment.patient_id}}"
+                        method="POST">
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1"><u>{{ prescription.name }}</u></h6>
+                                    <div>
+                                        <button type="submit" class="btn btn-dark btn-sm">
+                                            <i class="far fa-plus-square"></i>
+                                            add</button>
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                        <input type="hidden" name="is_visible" value="True">
+                                        <small>Amount per day:
+                                            <span
+                                                class="badge badge-info badge-pill">{{prescription.amount_per_day}}</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/sessionTimer.js') }}"></script>
+{% endblock %}

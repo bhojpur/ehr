@@ -1,0 +1,45 @@
+.cardProfile {
+    width: 350px;
+    background-color: #f2ebd9;
+    cursor: pointer;
+    transition: all 0.5s;
+    border-radius: 1em;
+}
+
+.imageCard img {
+    transition: all 0.5s
+}
+
+.cardProfile:hover .imageCard img {
+    transform: scale(1.1)
+}
+
+.btnCard {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%
+}
+
+.name {
+    font-size: 22px;
+    font-weight: bold
+}
+
+.role,
+.phone,
+.email {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.address {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 600
+}
+
+.profileAvatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}

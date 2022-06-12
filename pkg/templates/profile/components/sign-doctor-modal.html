@@ -1,0 +1,32 @@
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal">
+    Choose doctor <i class="fas fa-user-md"></i></button>
+<div id="signDoctorModal" class="modal fade bd-example-modal" tabindex="-1" role="dialog" aria-labelledby="confirmDoctor"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Welcome <u>{{user_info.name}}</u> to Bhojpur EHR</h5>
+            </div>
+            <div class="modal-body">
+                <p>You came to the right neighbourhood!</p>
+                <p><u>Firstly, we need to sign you a personal doctor.</u></p>
+                <h6>Choose one of our doctors from the list below:</h6>
+                <form action="/profile/sign-doctor" method="POST">
+                    <select class="custom-select" id="doctor" name="signed_doctor_id">
+                        {% for doctor in all_doctors %}
+                        <option value="{{doctor.user_id}}">{{doctor.name}} </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-dark">Confirm your choice</button>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    window.onload = () => {
+        $("#signDoctorModal").modal('show');
+    };
+</script>
+<p>Personal doctor not chosen.</p>

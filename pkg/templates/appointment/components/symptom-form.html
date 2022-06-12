@@ -1,0 +1,11 @@
+<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 bottomColumn">
+    <form action="/appointment/{{appointment.id}}/symptom/{{appointment.patient_id}}" method="POST">
+        <div class="form-group">
+            <h5><u>Write symptoms</u> <i class="fas fa-file-medical-alt"></i></h5>
+            <textarea class="form-control" name="symptom" rows="5" maxlength="500">{{appointment.symptom}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-dark">Update symptom <i class="far fa-edit"></i></button>
+        <a href="/profile"><button type="button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Back</button></a>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    </form>
+</div>

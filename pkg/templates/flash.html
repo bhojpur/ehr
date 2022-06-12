@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flash.css') }}">
+{% with messages = get_flashed_messages(with_categories = True) %}
+{% if messages %}
+{% for category, message in messages %}
+<div id="flash" class="alert alert-{{category}}" role="alert">
+    {{message}}
+    {% if category == 'success' %}
+    <i class="fas fa-check-circle"></i>
+    {% else %}
+    <i class="fas fa-exclamation-triangle"></i>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
