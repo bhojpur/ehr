@@ -1,5 +1,6 @@
 /.vscode
 /bin
+db.sqlite
 
 # Binaries for programs and plugins
 *.exe

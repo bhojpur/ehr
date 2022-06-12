@@ -25,7 +25,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from os import getenv
 
-app = Flask(__name__, static_folder="static", static_url_path='')
+app = Flask(__name__, static_folder="static", static_url_path='/static/')
 
 #app.config["SECRET_KEY"] = "12345678"
 #app.config['WTF_CSRF_SECRET_KEY'] = "12345678"
